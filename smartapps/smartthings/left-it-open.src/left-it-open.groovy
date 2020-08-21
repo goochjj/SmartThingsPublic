@@ -39,6 +39,9 @@ preferences {
     input "frequency", "number", title: "Number of minutes", description: "", required: false
   }
 
+    section("Switch to turn on") {
+    	input "light", "capability.switch", title: "Which switch?"
+    }
   section("Via text message at this number (or via push notification if not specified") {
     input("recipients", "contact", title: "Send notifications to") {
       input "phone", "phone", title: "Phone number (optional)", required: false
@@ -82,6 +85,7 @@ def doorOpenTooLong() {
     def threshold = ((openThreshold != null && openThreshold != "") ? openThreshold * 60000 : 60000) - 1000
     if (elapsed >= threshold) {
       log.debug "Contact has stayed open long enough since last check ($elapsed ms):  calling sendMessage()"
+      light.on()
       sendMessage()
       runIn(freq, doorOpenTooLong, [overwrite: false])
     } else {
