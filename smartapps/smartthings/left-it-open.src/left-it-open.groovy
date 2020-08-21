@@ -73,6 +73,7 @@ def doorOpen(evt) {
 
 def doorClosed(evt) {
   log.trace "doorClosed($evt.name: $evt.value)"
+  light.off()
   unschedule(doorOpenTooLong)
 }
 
